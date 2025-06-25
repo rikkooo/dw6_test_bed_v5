@@ -56,7 +56,7 @@ def handle_engineer_start(manager):
     """
     state = manager.get_state()
     project_name = os.path.basename(os.getcwd())
-    cycle_number = state['Cycle']
+    cycle_number = state['RequirementPointer']
     
     spec_dir = "deliverables/engineering"
     spec_filename = f"cycle_{cycle_number}_technical_specification.md"

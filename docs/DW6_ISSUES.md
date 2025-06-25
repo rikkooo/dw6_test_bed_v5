@@ -31,3 +31,9 @@ This document tracks issues, flaws, and potential improvements discovered during
 - **Issue:** After fixing the `AttributeError`, the `dw6 status` command executed silently, providing no output to the user.
 - **Impact:** High. The command failed to provide any information about the workflow's state.
 - **Resolution (in `dw6_test_bed_v5`):** Modified `src/dw6/cli.py` to iterate through the dictionary returned by `manager.get_state()` and print each key-value pair, providing clear and informative output.
+
+## 6. `engineer start` Command Fails with KeyError
+
+- **Issue:** The `dw6 engineer start` command failed with a `KeyError: 'Cycle'` because it was trying to access a non-existent key in the state dictionary.
+- **Impact:** Critical. It was impossible to generate the technical specification, blocking the workflow.
+- **Resolution (in `dw6_test_bed_v5`):** Corrected the key access in `src/dw6/cli.py` from `state['Cycle']` to the correct key, `state['RequirementPointer']`.
