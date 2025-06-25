@@ -72,8 +72,9 @@ class WorkflowManager:
             print("ERROR: No test files found in the 'tests' directory.", file=sys.stderr)
             sys.exit(1)
         try:
-            venv_python = os.path.join(os.getcwd(), "venv", "bin", "python")
-            collect_result = subprocess.run([venv_python, "-m", "pytest", "--collect-only"], capture_output=True, text=True)
+            # Use sys.executable to ensure we're using the python from the current venv
+            python_executable = sys.executable
+            collect_result = subprocess.run([python_executable, "-m", "pytest", "--collect-only"], capture_output=True, text=True, check=True)
             if "no tests collected" in collect_result.stdout.lower():
                 print("ERROR: Pytest collected no tests.", file=sys.stderr)
                 print(collect_result.stdout, file=sys.stderr)
@@ -84,15 +85,15 @@ class WorkflowManager:
                 print(collect_result.stdout, file=sys.stderr)
                 sys.exit(1)
             print(f"Pytest collected {match.group(1)} tests. Running them now...")
-            result = subprocess.run([venv_python, "-m", "pytest"], capture_output=True, text=True)
+            result = subprocess.run([python_executable, "-m", "pytest"], capture_output=True, text=True)
             if result.returncode != 0:
                 print("Pytest validation failed:", file=sys.stderr)
                 print(result.stdout, file=sys.stderr)
                 print(result.stderr, file=sys.stderr)
                 sys.exit(1)
             print("Pytest validation successful.")
-        except FileNotFoundError:
-            print("ERROR: pytest command not found or venv is not set up correctly.", file=sys.stderr)
+        except (FileNotFoundError, subprocess.CalledProcessError):
+            print("ERROR: pytest command not found or failed to run. Is it installed in your venv?", file=sys.stderr)
             sys.exit(1)
 
     def _validate_deployment(self):
