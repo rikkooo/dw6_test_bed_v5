@@ -5,49 +5,54 @@
 
 ## 1. Overview
 
-*A brief summary of the goals for this cycle. What business value will be delivered?*
+This cycle aims to significantly improve the robustness and automation of the DW6 development workflow. The primary goal is to fix critical bugs found during the initial setup and usage of the protocol, focusing on environment creation, dependency installation, CLI command stability, and GitHub integration. This will deliver immediate value by making the workflow more reliable and developer-friendly.
 
 ## 2. Scope
 
 ### In Scope
 
-*   Clearly define what functionalities will be built.
+- Replace the standard `venv`/`pip` setup with `uv` for environment and package management.
+- Integrate the `github-mcp-server` to fully automate GitHub repository creation and linking.
+- Permanently fix the `AttributeError` and silent output bugs in the `dw6 status` command.
+- Permanently fix the `KeyError` bug in the `dw6 engineer start` command.
 
 ### Out of Scope
 
-*   Clearly define what will *not* be built to manage expectations.
+- Any changes to the core state transition logic (beyond fixing the CLI commands).
+- Introducing new stages or modifying the purpose of existing stages.
+- UI/UX enhancements not directly related to the CLI command fixes.
 
 ## 3. System Architecture
 
-*A high-level description of the proposed architecture. How do the components interact?*
-
-```mermaid
-graph TD;
-    A[User] -->|Submits Data| B(API Endpoint);
-    B --> C{Business Logic};
-    C --> D[Database];
-```
+The changes will be confined to the DW6 project setup scripts and the core `dw6` Python package, specifically the `cli.py` and `state_manager.py` modules. The interaction with external systems involves using `uv` as a command-line tool and making API calls to the `github-mcp-server`.
 
 ## 4. Data Model
 
-*Description of new or modified data structures, database schemas, and relationships.*
+No changes to the data model or the `workflow_state.txt` format are required. The `KeyError` fix involves correctly referencing an existing key (`RequirementPointer`) rather than adding a new one.
 
 ## 5. Functional Requirements (User Stories)
 
-*   **US-01:** As a [user type], I want to [action] so that [benefit].
-    *   **Acceptance Criteria 1:** [Condition to be met for the story to be considered complete]
-    *   **Acceptance Criteria 2:** [Another condition]
+- **US-01:** As a developer, I want the project setup to reliably create a virtual environment and install all dependencies so that I can start working on the project without manual intervention.
+  - **Acceptance Criteria 1:** The setup process uses `uv` to create a virtual environment.
+  - **Acceptance Criteria 2:** The setup process uses `uv` to install all dependencies from `pyproject.toml`.
+- **US-02:** As a developer, I want the project setup to automatically create a GitHub repository and link it to my local project so that I don't have to perform these steps manually.
+  - **Acceptance Criteria 1:** The workflow uses an MCP server to create a new GitHub repository.
+  - **Acceptance Criteria 2:** The local repository is correctly configured with the new remote URL.
+- **US-03:** As a developer, I want to run `dw6 status` and see a clear, accurate representation of the project's current state so that I know what stage I am in.
+  - **Acceptance Criteria 1:** The command executes without error.
+  - **Acceptance Criteria 2:** The command prints the current stage and requirement pointer.
 
 ## 6. Implementation Plan
 
 *A numbered, logical list of tasks for the Coder. This is the direct input for the next stage.*
 
-1.  **Task:**
-2.  **Task:**
-3.  **Task:**
+1. **Task:** Modify the `start-project-dw6.md` workflow to use `uv venv` and `uv pip install` instead of `python -m venv` and `pip`.
+2. **Task:** Update the `start-project-dw6.md` workflow to use the `github-mcp-server` to create and link the remote repository, removing the manual step.
+3. **Task:** Verify the fix in `src/dw6/cli.py` that changes the `manager.get_status()` call to `manager.get_state()`.
+4. **Task:** Verify the fix in `src/dw6/cli.py` that prints the output from the `get_state()` method.
+5. **Task:** Verify the fix in `src/dw6/cli.py` that corrects the `KeyError` by using `state['RequirementPointer']`.
 
 ## 7. Questions & Assumptions
 
-*   **Question:** [Any open questions for stakeholders?]
-*   **Assumption:** [Any assumptions made that could impact the project?]
-
+- **Question:** None at this time.
+- **Assumption:** The user's environment has `uv` installed and the `github-mcp-server` is accessible and configured with valid credentials.
