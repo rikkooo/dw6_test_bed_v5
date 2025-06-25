@@ -1,2 +1,2 @@
-CurrentStage=Researcher
+CurrentStage=Validator
 RequirementPointer=6

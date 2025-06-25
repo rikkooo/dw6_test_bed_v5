@@ -22,10 +22,10 @@ To provide the Coder with a clear, proven implementation path for the tasks defi
 
 - **Finding:** The bugs in the `dw6` CLI were straightforward to resolve. The fixes involved correcting method names, printing returned values, and using the correct dictionary keys.
 - **Guidance for Coder:**
-    - **`status` command (AttributeError):** In `src/dw6/cli.py`, confirm the change from `manager.get_status()` to `manager.get_state()`.
-    - **`status` command (Silent Output):** In `src/dw6/cli.py`, confirm the implementation of a loop that prints the key-value pairs from the `manager.get_state()` dictionary.
-    - **`engineer start` command (KeyError):** In `src/dw6/cli.py`, confirm the change from `state['Cycle']` to `state['RequirementPointer']`.
-    - **`approve` command (Confusing Log):** In `src/dw6/state_manager.py`, confirm that the stage name is captured *before* the transition and used in the final approval message.
+  - **`status` command (AttributeError):** In `src/dw6/cli.py`, confirm the change from `manager.get_status()` to `manager.get_state()`.
+  - **`status` command (Silent Output):** In `src/dw6/cli.py`, confirm the implementation of a loop that prints the key-value pairs from the `manager.get_state()` dictionary.
+  - **`engineer start` command (KeyError):** In `src/dw6/cli.py`, confirm the change from `state['Cycle']` to `state['RequirementPointer']`.
+  - **`approve` command (Confusing Log):** In `src/dw6/state_manager.py`, confirm that the stage name is captured *before* the transition and used in the final approval message.
 
 ## Conclusion
 
