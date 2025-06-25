@@ -37,3 +37,9 @@ This document tracks issues, flaws, and potential improvements discovered during
 - **Issue:** The `dw6 engineer start` command failed with a `KeyError: 'Cycle'` because it was trying to access a non-existent key in the state dictionary.
 - **Impact:** Critical. It was impossible to generate the technical specification, blocking the workflow.
 - **Resolution (in `dw6_test_bed_v5`):** Corrected the key access in `src/dw6/cli.py` from `state['Cycle']` to the correct key, `state['RequirementPointer']`.
+
+## 7. Confusing Approval Message
+
+- **Issue:** The `approve` command printed a confusing success message, such as `--- Stage Researcher Approved. New Stage: Researcher ---`.
+- **Impact:** Low, but the message is misleading and unprofessional.
+- **Resolution (in `dw6_test_bed_v5`):** Fixed the log message in `src/dw6/state_manager.py` to correctly report the stage that was just completed (e.g., `--- Stage Engineer Approved. New Stage: Researcher ---`).

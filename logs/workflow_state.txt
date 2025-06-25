@@ -1,2 +1,2 @@
-CurrentStage=Engineer
+CurrentStage=Researcher
 RequirementPointer=6

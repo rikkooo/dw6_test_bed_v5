@@ -27,13 +27,14 @@ class WorkflowManager:
         return self.state.data
 
     def approve(self):
-        print(f"--- Approving Stage: {self.current_stage} ---")
+        old_stage = self.current_stage
+        print(f"--- Approving Stage: {old_stage} ---")
         self._validate_stage()
         self._run_pre_transition_actions()
         self._transition_to_next_stage()
         self._run_post_transition_actions()
         self.state.save()
-        print(f"--- Stage {self.current_stage} Approved. New Stage: {self.state.get('CurrentStage')} ---")
+        print(f"--- Stage {old_stage} Approved. New Stage: {self.state.get('CurrentStage')} ---")
 
     def _validate_stage(self):
         print(f"Validating deliverables for stage: {self.current_stage}")
