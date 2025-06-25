@@ -41,7 +41,11 @@ def main():
     if args.command == "approve":
         manager.approve()
     elif args.command == "status":
-        manager.get_status()
+        state = manager.get_state()
+        print("--- Current Workflow Status ---")
+        for key, value in state.items():
+            print(f"{key}: {value}")
+        print("-----------------------------")
     elif args.command == "engineer":
         if args.engineer_command == "start":
             handle_engineer_start(manager)
